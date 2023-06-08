@@ -3,29 +3,92 @@
   <head>
     <title>Chat Interface</title>
     <style>
-      /* Style for chat box */
-      .chat-box {
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f2f2f2;
+      }
+
+      /* Style for chat container */
+      .chat-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 400px;
         height: 400px;
         border: 1px solid #ccc;
-        overflow: auto;
+        background-color: #fff;
         padding: 10px;
+        font-family: Arial, sans-serif;
+      }
+
+      /* Style for chat box */
+      .chat-box {
+        flex-grow: 1;
+        overflow-y: scroll;
+        margin-bottom: 10px;
+        width: 100%;
       }
 
       /* Style for user and bot messages */
-      .user-message {
+      .message {
+        display: inline-block;
+        max-width: 80%;
         margin-bottom: 10px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        line-height: 1.4;
+      }
+
+      .user-message {
+        background-color: #007bff;
+        color: #fff;
+        text-align: right;
+        align-self: flex-end;
       }
 
       .bot-message {
-        margin-top: 10px;
+        background-color: #e9ecef;
+        color: #212529;
+        text-align: left;
+        align-self: flex-start;
+      }
+
+      /* Style for user input area */
+      .user-input {
+        display: flex;
+        width: 100%;
+      }
+
+      .user-input input {
+        flex-grow: 1;
+        padding: 6px;
+        font-size: 14px;
+      }
+
+      .user-input button {
+        padding: 6px 12px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        font-size: 14px;
+        cursor: pointer;
       }
     </style>
   </head>
   <body>
-    <div class="chat-box" id="chatBox"></div>
-    <input type="text" id="userInput" placeholder="Type your message" />
-    <button onclick="sendMessage()">Send</button>
+      
+    <div class="chat-container">
+
+      <div class="chat-box" id="chatBox"></div>
+      <div class="user-input">
+        <input type="text" id="userInput" placeholder="Type your message" />
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
 
     <script>
       // Function to send user message and get bot reply
@@ -35,9 +98,9 @@
 
         // Display user message in chat box
         const userMessageElement = document.createElement('div');
-        userMessageElement.classList.add('user-message');
-        userMessageElement.textContent = `You: ${message}`;
-        document.getElementById('chatBox').appendChild(userMessageElement);
+		userMessageElement.classList.add('message', 'user-message');
+		userMessageElement.innerHTML = '<strong>You:</strong> ' + message;
+		document.getElementById('chatBox').appendChild(userMessageElement);
 
         // Send user message to API and get bot reply
         fetch('/chat', {
@@ -45,19 +108,19 @@
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ message }),
+          body: JSON.stringify({ question: message }),
         })
           .then((response) => response.json())
-          .then((data) => {
-            // Display bot reply in chat box
-            const botMessageElement = document.createElement('div');
-            botMessageElement.classList.add('bot-message');
-            botMessageElement.textContent = `Bot: ${data.reply}`;
-            document.getElementById('chatBox').appendChild(botMessageElement);
-          });
+		  .then((data) => {
+			// Display bot reply in chat box
+			const botMessageElement = document.createElement('div');
+			botMessageElement.classList.add('message', 'bot-message');
+			botMessageElement.innerHTML = '<strong>Chatbot:</strong> ' + data.reply;
+			document.getElementById('chatBox').appendChild(botMessageElement);
+			});
 
-        userInput.value = ''; // Clear input field
-      }
+        userInput.value = '';
+    }
     </script>
   </body>
 </html>
