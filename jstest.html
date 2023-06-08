@@ -40,7 +40,7 @@
         document.getElementById('chatBox').appendChild(userMessageElement);
 
         // Send user message to API and get bot reply
-        fetch('/api/chat', {
+        fetch('/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
