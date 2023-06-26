@@ -62,3 +62,29 @@ for file_name in os.listdir(folder_path):
     if file_name.endswith('.env'):
         file_path = os.path.join(folder_path, file_name)
         update_project_id(file_path, new_project_id)
+
+
+import configparser
+
+def update_ini_file(file_path, section, key, new_value):
+    config = configparser.ConfigParser()
+    config.read(file_path)
+    if section in config and key in config[section]:
+        current_value = config[section][key]
+        if current_value != new_value:
+            config.set(section, key, new_value)
+            with open(file_path, 'w') as config_file:
+                config.write(config_file)
+            print(f"Updated {key} in {file_path} from {current_value} to {new_value}")
+    else:
+        print(f"No {key} found in {file_path}")
+
+# Provide the INI file path
+file_path = '/path/to/config.ini'
+
+# Provide the section, key, and new value to update
+section = 'section_name'
+key = 'project_id'
+new_value = 'some_new_value'
+
+update_ini_file(file_path, section, key, new_value)
