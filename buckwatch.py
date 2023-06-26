@@ -22,9 +22,9 @@ if blob.exists():
         blob.download_to_filename(FILE_NAME + ".new")
 
         # Compare the contents with the existing file
-        if not filecmp.cmp(FILE_NAME, FILE_NAME + ".new"):
+        if open(FILE_NAME, 'rb').read() != open(FILE_NAME + ".new", 'rb').read():
             # Contents are different, replace the existing file
-            os.rename(FILE_NAME + ".new", FILE_NAME)
+            os.replace(FILE_NAME + ".new", FILE_NAME)
             print("File replaced.")
         else:
             # Contents are the same, log a message
